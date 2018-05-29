@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>component</title>
+</head>
+
+<body>
+    <div id="app" :style="{fontSize:postFontSize + 'em'}">
+        <div>
+            <postcomponent v-on:enlarge='enlarge' v-for='post in posts' v-bind:title='post.title' v-bind:content='post.content' :key='post.title'></postcomponent>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                postFontSize: 2,
+                posts: [{
+                    title: 'title1',
+                    content: 'content...'
+                }, {
+                    title: 'title2',
+                    content: 'content...'
+                }, {
+                    title: 'title3',
+                    content: 'content...'
+                }, ]
+            },
+            methods: {
+                enlarge: function() {
+                    this.postFontSize += 1
+                }
+            },
+            // 子组件定义的事件只能父组件触发
+            // <button @click='enlarge'>enlarge font</button>
+            components: {
+                postcomponent: {
+                    props: ['title', 'content'],
+                    template: `
+                      <div>
+                        <h3>{{title}}</h3>
+                        <p>{{content}}</p>
+                        <button @click='$emit("enlarge")'>enlarge font</button>
+                      </div>
+                    `
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
